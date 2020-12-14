@@ -84,6 +84,7 @@ class LogicGate {
 		}
 
 		if (this.resize) {
+			//Resize the logic gate
 			this.width += mouseX - (this.x + this.width);
 			this.height += mouseY - (this.y + this.height);
 		}
@@ -172,6 +173,7 @@ class LogicGate {
 	}
 
 	notPressed() {
+		//Reset variables when mouse is released
 		this.dragging = false;
 		this.resize = false;
 	}
