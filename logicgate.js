@@ -41,6 +41,7 @@ class LogicGate {
 		this.padding = this.gate.padding;
 
 		this.dragging = false;
+		this.resize = false;
 		this.offsetX = 0;
 		this.offsetY = 0;
 
@@ -65,6 +66,11 @@ class LogicGate {
 		//Detect mouse hover on rectangle
 		if ((mouseX > this.x && mouseX < (this.x+this.width)) && (mouseY > this.y && mouseY < (this.y+this.height)) && !this.circleHover){
 			rectColour = 50;
+			//Detect mouse in top right corner for resize
+			if (mouseIsPressed && mouseX > (this.x+this.width-20) && mouseX < (this.x+this.width) && mouseY > (this.y+this.height-20) && mouseY < (this.y+this.height)) {
+				this.dragging = false;
+				this.resize = true;
+			}
 		}
 
 		//Draw the rectangle
@@ -75,6 +81,11 @@ class LogicGate {
 		if (this.dragging) {
 			this.x = mouseX + this.offsetX;
 			this.y = mouseY + this.offsetY;
+		}
+
+		if (this.resize) {
+			this.width += mouseX - (this.x + this.width);
+			this.height += mouseY - (this.y + this.height);
 		}
 
 		rect(this.x,this.y,this.width,this.height);
@@ -160,8 +171,9 @@ class LogicGate {
 		}
 	}
 
-	notPressed(px, py) {
+	notPressed() {
 		this.dragging = false;
+		this.resize = false;
 	}
 
 	updateState() {

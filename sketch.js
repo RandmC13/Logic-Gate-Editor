@@ -142,7 +142,7 @@ function mouseReleased() {
 
 		logicGates[i].drawLine = false;
 		logicGates[i].outputLine = false;
-		logicGates[i].notPressed(mouseX, mouseY);
+		logicGates[i].notPressed();
 	}
 
 	//Check if a link needs to be created between the start buttons and a logic gate and check for duplicates
