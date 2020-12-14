@@ -89,6 +89,7 @@ class LogicGate {
 		strokeWeight(4);
 
 		if (this.dragging) {
+			//Move the logic gate if the dragging variable is true
 			this.x = mouseX + this.offsetX;
 			this.y = mouseY + this.offsetY;
 		}
