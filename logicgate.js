@@ -42,6 +42,7 @@ class LogicGate {
 
 		this.dragging = false;
 		this.resize = false;
+		this.resizeHover = false;
 		this.offsetX = 0;
 		this.offsetY = 0;
 
@@ -66,11 +67,20 @@ class LogicGate {
 		//Detect mouse hover on rectangle
 		if ((mouseX > this.x && mouseX < (this.x+this.width)) && (mouseY > this.y && mouseY < (this.y+this.height)) && !this.circleHover){
 			rectColour = 50;
-			//Detect mouse in bottom right corner for resize
-			if (mouseIsPressed && mouseX > (this.x+this.width-20) && mouseX < (this.x+this.width) && mouseY > (this.y+this.height-20) && mouseY < (this.y+this.height)) {
+		}
+
+		//Detect mouse in bottom right corner for resize
+		if (mouseX > (this.x+this.width-20) && mouseX < (this.x+this.width) && mouseY > (this.y+this.height-20) && mouseY < (this.y+this.height) && !this.circleHover) {
+			cursor(CROSS); //Set the cursor to a cross on mouse hover
+			this.resizeHover = true;
+			if (mouseIsPressed) {
 				this.dragging = false;
 				this.resize = true;
 			}
+		} else if (this.resizeHover){
+			//Reset cursor
+			cursor(ARROW);
+			this.resizeHover = false;
 		}
 
 		//Draw the rectangle
