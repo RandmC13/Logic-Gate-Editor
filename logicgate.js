@@ -41,6 +41,7 @@ class LogicGate {
 		this.padding = this.gate.padding;
 
 		this.dragging = false;
+		this.hover = false;
 		this.resize = false;
 		this.resizeHover = false;
 		this.offsetX = 0;
@@ -67,6 +68,10 @@ class LogicGate {
 		//Detect mouse hover on rectangle
 		if ((mouseX > this.x && mouseX < (this.x+this.width)) && (mouseY > this.y && mouseY < (this.y+this.height)) && !this.circleHover){
 			rectColour = 50;
+			this.hover = true;
+		} else if (this.hover) {
+			//Reset hover variable
+			this.hover = false;
 		}
 
 		//Detect mouse in bottom right corner for resize
@@ -207,5 +212,20 @@ class LogicGate {
 			for (i=0;i<this.in.length;i++) {inputs.push(this.in[i].state);}
 			for (i=0;i<this.out.length;i++) {this.out[i].state = this.fun(inputs);}
 		}
+	}
+
+	removeConnections() {
+		//Delete input links
+		this.in.forEach(v => {
+			if (v !== 0) {
+				v.severLink();
+			}
+		});
+		//Delete output links
+		this.out.forEach(v => {
+			if (v !== 0) {
+				v.severLink();
+			}
+		});
 	}
 }

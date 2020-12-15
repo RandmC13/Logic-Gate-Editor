@@ -4,6 +4,7 @@ let links = [];
 let startButtons = [];
 let outputs = [];
 let click = true;
+let keyToggle = true;
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
@@ -70,7 +71,7 @@ function draw() {
 	});
 
 	//Draw Logic Gates
-	logicGates.forEach(v => {
+	logicGates.forEach((v,i) => {
 		//Check for collision
 		if ((v.y+v.height) > barTop) {
 			v.y = barTop - v.height;
@@ -86,6 +87,18 @@ function draw() {
 		}
 		v.draw();
 		v.updateState();
+
+		//Check for mouse hover and backspace key
+		if (v.hover && keyIsPressed && keyCode == BACKSPACE && keyToggle) {
+			//Delete the links on the logic gate
+			v.removeConnections();
+			//Remove logic gate from array
+			logicGates.splice(i,1);
+			//Set key toggle
+			keyToggle = false; //key toggle makes it such that the delete process is only ran once per key press
+		} else if (!keyIsPressed && !keyToggle) {
+			keyToggle = true;
+		}
 	});
 }
 
