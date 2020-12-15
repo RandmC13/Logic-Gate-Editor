@@ -6,15 +6,18 @@ let outputs = [];
 let click = true;
 let keyToggle = true;
 
+let barTop;
+let barHeight;
+
 function setup() {
 	createCanvas(windowWidth, windowHeight);
 	startButtons.push(new Input("A", 5, windowHeight*0.3), new Input("B", 5, windowHeight*0.6));
-	outputs.push(new Output("Output",windowWidth-50,windowHeight/2,50));
+	outputs.push(new Output("Output",windowWidth-50,(windowHeight*0.9)/2,50));
 }
 
 function draw() {
-	let barTop = windowHeight * 0.9;
-	let barHeight = windowHeight - barTop;
+	barTop = windowHeight * 0.9;
+	barHeight = windowHeight - barTop;
 	let screenHeight = barTop;
 	background(82,82,82);
 
@@ -103,7 +106,12 @@ function draw() {
 }
 
 function windowResized() {
-   resizeCanvas(windowWidth, windowHeight);
+	resizeCanvas(windowWidth, windowHeight);
+	//Reset Output coordinates
+	outputs.forEach(v => {
+		v.x = windowWidth - v.width;
+		v.y = (windowHeight-barHeight)/2;
+	})
 }
 
 function mousePressed() {
