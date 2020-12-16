@@ -66,15 +66,15 @@ function draw() {
 	//Draw Outputs
 	outputs.forEach((v, i) => {
 		v.x = windowWidth - v.width;
-		//Evenly distribute outputs
-		v.y = ((barTop/outputs.length)*i) + (((barTop/outputs.length)-v.width) / 2);
+		//Evenly distribute outputs if move mode is off
+		if (!v.move) {v.y = ((barTop/outputs.length)*i) + (((barTop/outputs.length)-v.width) / 2);}
 		v.draw();
 	});
 
 	//Draw Inputs
 	startButtons.forEach((v, i) => {
-		//Evenly distribute inputs
-		v.y = ((barTop/startButtons.length)*i) + (((barTop/startButtons.length)-v.height) / 2);
+		//Evenly distribute inputs if move mode is off
+		if (!v.move) {v.y = ((barTop/startButtons.length)*i) + (((barTop/startButtons.length)-v.height) / 2);}
 		v.draw();
 	});
 
@@ -118,10 +118,16 @@ function mousePressed() {
 	for (i=0;i<logicGates.length;i++) {
 		logicGates[i].pressed(mouseX, mouseY);
 	}
+	for (i=0;i<startButtons.length;i++) {
+		startButtons[i].pressed(mouseX, mouseY);
+	}
+	for (i=0;i<outputs.length;i++) {
+		outputs[i].pressed(mouseX, mouseY);
+	}
 }
 
 function mouseReleased() {
-	draggingGate = false;
+	draggingObject = false;
 	click = true;
 	//Check if a link needs to be created between two logic gates and also checks for duplicates
 	for (i=0;i<logicGates.length;i++) {
@@ -203,11 +209,27 @@ function mouseReleased() {
 				}
 			}
 		}
-	}
 
-	//Reset the variables for the start button
-	for (i=0;i<startButtons.length;i++) {
+		//Reset the variables for the start button
+		startButtons[i].notPressed();
 		startButtons[i].click = true;
 		startButtons[i].drawLine = false;
+
+	}
+
+	for (i=0;i<outputs.length;i++) {
+		//Reset the variables for the output
+		outputs[i].notPressed();
+	}
+}
+
+function keyPressed() {
+	if (key == 'm') {
+		startButtons.forEach(v => {
+			v.moveMode(mouseX, mouseY);
+		});
+		outputs.forEach(v => {
+			v.moveMode(mouseX, mouseY);
+		});
 	}
 }

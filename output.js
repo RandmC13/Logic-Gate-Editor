@@ -10,11 +10,24 @@ class Output {
 		this.in = [0];
 		this.inputCircleCoords=[[0,0]];
 		this.inputDiameter = 0;
+
+		this.move = false;
+		this.baseColour = 54;
+		this.connectorHover = false;
+		
+		this.dragging = false;
+		this.offsetY = 0;
 	}
 
 	draw(){
+
+		//If dragging is true, move the input
+		if (this.dragging) {
+			this.y = mouseY + this.offsetY;
+		}
+		
 		//Base rectangle
-		fill(54);
+		fill(this.baseColour);
 		noStroke();
 		rect(this.x,this.y,this.width);
 		//Connector
@@ -28,10 +41,34 @@ class Output {
 		fill(200);
 		if(dist(mouseX,mouseY,connectorX,connectorY) < connectorDiameter/2) {
 			fill(160);
-		}
+			this.connectorHover = true;
+		} else {this.connectorHover = false;}
 		if (this.in.length > 0 && this.in[0].state){
 			fill(255,0,0);
 		}
 		circle(connectorX, connectorY, connectorDiameter);
 	}
+
+	pressed(px, py) {
+		//Check for mouse hover
+		if (px > this.x && px < this.x + this.width && py > this.y && py < this.y + this.width && !this.connectorHover && this.move) {
+			this.dragging = true;
+			draggingObject = true;
+			this.offsetY = this.y - py;
+		}
+	}
+
+	notPressed() {
+		//Reset variables when mouse is release
+		this.dragging = false;
+	}
+
+	moveMode(px, py) {
+		if (px > this.x && px < this.x + this.width && py > this.y && py < this.y + this.width && !this.connectorHover) {
+			//Turn on move mode
+			this.move = !this.move;
+			//Toggle Rectangle Colour
+			if (this.baseColour == 54) {this.baseColour = 65;} else {this.baseColour = 54;}
+		}
+	} 
 }

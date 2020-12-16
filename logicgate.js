@@ -120,7 +120,7 @@ class LogicGate {
 			let circlecentreY = this.y+(i*sectionHeight)+(sectionHeight/2);
 			this.inputCircleCoords.push([this.x,circlecentreY]);
 			//Detect mouse hover on circle
-			if (dist(mouseX,mouseY,this.inputCircleCoords[i][0],this.inputCircleCoords[i][1]) < (this.inputDiameter/2) && !draggingGate) {
+			if (dist(mouseX,mouseY,this.inputCircleCoords[i][0],this.inputCircleCoords[i][1]) < (this.inputDiameter/2) && !draggingObject) {
 				this.circleHover = true;
 				inputCircleColour = 100;
 				strokeWeight(4);
@@ -182,7 +182,7 @@ class LogicGate {
 
 	pressed(px, py){
 		if (px > this.x && px < this.x + this.width && py > this.y && py < this.y + this.height && !this.circleHover) {
-			draggingGate = true;
+			draggingObject = true;
 			this.dragging = true;
 			this.offsetX = this.x - px;
 			this.offsetY = this.y - py;
