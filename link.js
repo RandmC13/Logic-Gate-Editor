@@ -18,6 +18,7 @@ class Link {
 		let y2 = inputCircleCoords[this.inputnum][1];
 
 		stroke(0);
+		strokeWeight(2);
 		//Change colour to red if the connection is on
 		if (this.state) {stroke(255,0,0);}
 		

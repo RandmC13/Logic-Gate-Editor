@@ -112,6 +112,11 @@ function windowResized() {
 		v.x = windowWidth - v.width;
 		v.y = (windowHeight-barHeight)/2;
 	})
+	//Reset Input coordinates
+	startButtons.forEach((v, i) => {
+		//Evenly distribute inputs
+		v.y = ((barTop/startButtons.length)*i) + (((barTop/startButtons.length)-v.height) / 2);
+	})
 }
 
 function mousePressed() {
