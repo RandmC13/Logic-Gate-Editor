@@ -64,12 +64,17 @@ function draw() {
 	}
 
 	//Draw Outputs
-	outputs.forEach(v => {
+	outputs.forEach((v, i) => {
+		v.x = windowWidth - v.width;
+		//Evenly distribute outputs
+		v.y = ((barTop/outputs.length)*i) + (((barTop/outputs.length)-v.width) / 2);
 		v.draw();
 	});
 
 	//Draw Inputs
-	startButtons.forEach(v => {
+	startButtons.forEach((v, i) => {
+		//Evenly distribute inputs
+		v.y = ((barTop/startButtons.length)*i) + (((barTop/startButtons.length)-v.height) / 2);
 		v.draw();
 	});
 
@@ -107,16 +112,6 @@ function draw() {
 
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
-	//Reset Output coordinates
-	outputs.forEach(v => {
-		v.x = windowWidth - v.width;
-		v.y = (windowHeight-barHeight)/2;
-	})
-	//Reset Input coordinates
-	startButtons.forEach((v, i) => {
-		//Evenly distribute inputs
-		v.y = ((barTop/startButtons.length)*i) + (((barTop/startButtons.length)-v.height) / 2);
-	})
 }
 
 function mousePressed() {
@@ -126,6 +121,7 @@ function mousePressed() {
 }
 
 function mouseReleased() {
+	draggingGate = false;
 	click = true;
 	//Check if a link needs to be created between two logic gates and also checks for duplicates
 	for (i=0;i<logicGates.length;i++) {

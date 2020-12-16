@@ -28,7 +28,7 @@ class Link {
 			if (mouseX > x1 && mouseX < x2) {
 				strokeWeight(4);
 				if (mouseIsPressed) {
-					if (dist(mouseX,mouseY,this.start.outputCircleCoords[0],this.start.outputCircleCoords[1]) > this.start.outputDiameter/2 && dist(mouseX,mouseY,this.end.inputCircleCoords[this.inputnum][0],this.end.inputCircleCoords[this.inputnum][1]) > this.end.inputDiameter/2) {
+					if (dist(mouseX,mouseY,this.start.outputCircleCoords[0],this.start.outputCircleCoords[1]) > this.start.outputDiameter/2 && dist(mouseX,mouseY,this.end.inputCircleCoords[this.inputnum][0],this.end.inputCircleCoords[this.inputnum][1]) > this.end.inputDiameter/2 && !draggingGate) {
 						this.severLink();
 					}
 				}

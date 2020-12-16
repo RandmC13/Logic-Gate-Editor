@@ -29,7 +29,7 @@ class Input {
 		let buttonHeight = this.height*0.8;
 		fill(100);
 		//Check for mouse hover over button
-		if (mouseX > buttonX && mouseX < buttonX+buttonWidth && mouseY > buttonY && mouseY < buttonY+buttonHeight) {
+		if (mouseX > buttonX && mouseX < buttonX+buttonWidth && mouseY > buttonY && mouseY < buttonY+buttonHeight && !draggingGate) {
 			fill(80);
 			//Check for mouse click
 			if (mouseIsPressed && this.click) {
@@ -55,7 +55,7 @@ class Input {
 		this.outputCircleCoords[1] = connectorY;
 		this.outputDiameter = connectorDiameter;
 		//Check for mouse hover over connector
-		if (dist(mouseX,mouseY,connectorX,connectorY) < connectorDiameter/2) {
+		if (dist(mouseX,mouseY,connectorX,connectorY) < connectorDiameter/2 && !draggingGate) {
 			fill(160);
 			//Check if line should be drawn
 			if (mouseIsPressed) {
