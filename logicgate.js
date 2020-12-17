@@ -41,6 +41,7 @@ class LogicGate {
 		this.padding = this.gate.padding;
 
 		this.dragging = false;
+		this.hover = false;
 		this.resize = false;
 		this.resizeHover = false;
 		this.offsetX = 0;
@@ -67,6 +68,10 @@ class LogicGate {
 		//Detect mouse hover on rectangle
 		if ((mouseX > this.x && mouseX < (this.x+this.width)) && (mouseY > this.y && mouseY < (this.y+this.height)) && !this.circleHover){
 			rectColour = 50;
+			this.hover = true;
+		} else if (this.hover) {
+			//Reset hover variable
+			this.hover = false;
 		}
 
 		//Detect mouse in bottom right corner for resize
@@ -89,6 +94,7 @@ class LogicGate {
 		strokeWeight(4);
 
 		if (this.dragging) {
+			//Move the logic gate if the dragging variable is true
 			this.x = mouseX + this.offsetX;
 			this.y = mouseY + this.offsetY;
 		}
@@ -114,7 +120,7 @@ class LogicGate {
 			let circlecentreY = this.y+(i*sectionHeight)+(sectionHeight/2);
 			this.inputCircleCoords.push([this.x,circlecentreY]);
 			//Detect mouse hover on circle
-			if (dist(mouseX,mouseY,this.inputCircleCoords[i][0],this.inputCircleCoords[i][1]) < (this.inputDiameter/2)) {
+			if (dist(mouseX,mouseY,this.inputCircleCoords[i][0],this.inputCircleCoords[i][1]) < (this.inputDiameter/2) && !draggingObject) {
 				this.circleHover = true;
 				inputCircleColour = 100;
 				strokeWeight(4);
@@ -176,6 +182,7 @@ class LogicGate {
 
 	pressed(px, py){
 		if (px > this.x && px < this.x + this.width && py > this.y && py < this.y + this.height && !this.circleHover) {
+			draggingObject = true;
 			this.dragging = true;
 			this.offsetX = this.x - px;
 			this.offsetY = this.y - py;
@@ -206,5 +213,20 @@ class LogicGate {
 			for (i=0;i<this.in.length;i++) {inputs.push(this.in[i].state);}
 			for (i=0;i<this.out.length;i++) {this.out[i].state = this.fun(inputs);}
 		}
+	}
+
+	removeConnections() {
+		//Delete input links
+		this.in.forEach(v => {
+			if (v !== 0) {
+				v.severLink();
+			}
+		});
+		//Delete output links
+		this.out.forEach(v => {
+			if (v !== 0) {
+				v.severLink();
+			}
+		});
 	}
 }

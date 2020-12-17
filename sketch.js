@@ -4,16 +4,20 @@ let links = [];
 let startButtons = [];
 let outputs = [];
 let click = true;
+let keyToggle = true;
+
+let barTop;
+let barHeight;
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
 	startButtons.push(new Input("A", 5, windowHeight*0.3), new Input("B", 5, windowHeight*0.6));
-	outputs.push(new Output("Output",windowWidth-50,windowHeight/2,50));
+	outputs.push(new Output("Output",windowWidth-50,(windowHeight*0.9)/2,50));
 }
 
 function draw() {
-	let barTop = windowHeight * 0.9;
-	let barHeight = windowHeight - barTop;
+	barTop = windowHeight * 0.9;
+	barHeight = windowHeight - barTop;
 	let screenHeight = barTop;
 	background(82,82,82);
 
@@ -60,17 +64,22 @@ function draw() {
 	}
 
 	//Draw Outputs
-	outputs.forEach(v => {
+	outputs.forEach((v, i) => {
+		v.x = windowWidth - v.width;
+		//Evenly distribute outputs if move mode is off
+		if (!v.move) {v.y = ((barTop/outputs.length)*i) + (((barTop/outputs.length)-v.width) / 2);}
 		v.draw();
 	});
 
 	//Draw Inputs
-	startButtons.forEach(v => {
+	startButtons.forEach((v, i) => {
+		//Evenly distribute inputs if move mode is off
+		if (!v.move) {v.y = ((barTop/startButtons.length)*i) + (((barTop/startButtons.length)-v.height) / 2);}
 		v.draw();
 	});
 
 	//Draw Logic Gates
-	logicGates.forEach(v => {
+	logicGates.forEach((v,i) => {
 		//Check for collision
 		if ((v.y+v.height) > barTop) {
 			v.y = barTop - v.height;
@@ -86,20 +95,39 @@ function draw() {
 		}
 		v.draw();
 		v.updateState();
+
+		//Check for mouse hover and backspace key
+		if (v.hover && keyIsPressed && keyCode == BACKSPACE && keyToggle) {
+			//Delete the links on the logic gate
+			v.removeConnections();
+			//Remove logic gate from array
+			logicGates.splice(i,1);
+			//Set key toggle
+			keyToggle = false; //key toggle makes it such that the delete process is only ran once per key press
+		} else if (!keyIsPressed && !keyToggle) {
+			keyToggle = true;
+		}
 	});
 }
 
 function windowResized() {
-   resizeCanvas(windowWidth, windowHeight);
+	resizeCanvas(windowWidth, windowHeight);
 }
 
 function mousePressed() {
 	for (i=0;i<logicGates.length;i++) {
 		logicGates[i].pressed(mouseX, mouseY);
 	}
+	for (i=0;i<startButtons.length;i++) {
+		startButtons[i].pressed(mouseX, mouseY);
+	}
+	for (i=0;i<outputs.length;i++) {
+		outputs[i].pressed(mouseX, mouseY);
+	}
 }
 
 function mouseReleased() {
+	draggingObject = false;
 	click = true;
 	//Check if a link needs to be created between two logic gates and also checks for duplicates
 	for (i=0;i<logicGates.length;i++) {
@@ -181,11 +209,27 @@ function mouseReleased() {
 				}
 			}
 		}
-	}
 
-	//Reset the variables for the start button
-	for (i=0;i<startButtons.length;i++) {
+		//Reset the variables for the start button
+		startButtons[i].notPressed();
 		startButtons[i].click = true;
 		startButtons[i].drawLine = false;
+
+	}
+
+	for (i=0;i<outputs.length;i++) {
+		//Reset the variables for the output
+		outputs[i].notPressed();
+	}
+}
+
+function keyPressed() {
+	if (key == 'm') {
+		startButtons.forEach(v => {
+			v.moveMode(mouseX, mouseY);
+		});
+		outputs.forEach(v => {
+			v.moveMode(mouseX, mouseY);
+		});
 	}
 }
