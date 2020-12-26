@@ -78,6 +78,8 @@ function draw() {
 		v.draw();
 	});
 
+	let deleteArray = [];
+
 	//Draw Logic Gates
 	logicGates.forEach((v,i) => {
 		//Check for collision
@@ -97,17 +99,19 @@ function draw() {
 		v.updateState();
 
 		//Check for mouse hover and backspace key
-		if (v.hover && keyIsPressed && keyCode == BACKSPACE && keyToggle) {
-			//Delete the links on the logic gate
-			v.removeConnections();
-			//Remove logic gate from array
-			logicGates.splice(i,1);
-			//Set key toggle
-			keyToggle = false; //key toggle makes it such that the delete process is only ran once per key press
-		} else if (!keyIsPressed && !keyToggle) {
-			keyToggle = true;
+		if (v.hover && keyIsPressed && keyCode == BACKSPACE) {
+			deleteArray.push(i); //Add logic gate to delete array
 		}
 	});
+
+	//If there is a logic gate to be deleted, delete them
+	if (deleteArray.length > 0 && keyToggle) {
+		//Set key toggle
+		keyToggle = false; //key toggle makes it such that the delete process is only ran once per key press
+		deleteGate(deleteArray[deleteArray.length-1]); //Delete last logic gate in the array (the one on top of all the others)
+	} else if (!keyIsPressed && !keyToggle) {
+		keyToggle = true;
+	}
 }
 
 function windowResized() {
@@ -232,4 +236,11 @@ function keyPressed() {
 			v.moveMode(mouseX, mouseY);
 		});
 	}
+}
+
+function deleteGate(index) {
+	//Delete the links on the logic gate
+	logicGates[index].removeConnections();
+	//Remove logic gate from array
+	logicGates.splice(index,1);
 }
