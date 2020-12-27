@@ -75,7 +75,7 @@ class LogicGate {
 		}
 
 		//Detect mouse in bottom right corner for resize
-		if (mouseX > (this.x+this.width-20) && mouseX < (this.x+this.width) && mouseY > (this.y+this.height-20) && mouseY < (this.y+this.height) && !this.circleHover) {
+		if (mouseX > (this.x+this.width-10) && mouseX < (this.x+this.width) && mouseY > (this.y+this.height-10) && mouseY < (this.y+this.height) && !this.circleHover) {
 			cursor(CROSS); //Set the cursor to a cross on mouse hover
 			this.resizeHover = true;
 			if (mouseIsPressed) {
@@ -147,7 +147,7 @@ class LogicGate {
 		this.outputCircleCoords[0] = (this.x+this.width);
 		this.outputCircleCoords[1] = (this.y+(this.height/2));
 		strokeWeight(2);
-		if (dist(mouseX,mouseY,this.outputCircleCoords[0],this.outputCircleCoords[1]) < (this.outputDiameter/2)) {
+		if (dist(mouseX,mouseY,this.outputCircleCoords[0],this.outputCircleCoords[1]) < (this.outputDiameter/2) && !draggingObject) {
 			this.circleHover = true;
 			outputCircleColour = 100;
 			strokeWeight(4);

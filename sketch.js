@@ -1,6 +1,5 @@
 let logicGateTypes = ["AND","OR","NOT","XOR"];
 let logicGates = [];
-let links = [];
 let startButtons = [];
 let outputs = [];
 let click = true;
@@ -79,6 +78,7 @@ function draw() {
 	});
 
 	let deleteArray = [];
+	let draggingArray = [];
 
 	//Draw Logic Gates
 	logicGates.forEach((v,i) => {
@@ -102,6 +102,11 @@ function draw() {
 		if (v.hover && keyIsPressed && keyCode == BACKSPACE) {
 			deleteArray.push(i); //Add logic gate to delete array
 		}
+
+		//Check for mouse hover and the logic gate being dragged
+		if (v.hover && v.dragging) {
+			draggingArray.push(i); //Add logic gate to dragging array
+		}
 	});
 
 	//If there is a logic gate to be deleted, delete them
@@ -111,6 +116,14 @@ function draw() {
 		deleteGate(deleteArray[deleteArray.length-1]); //Delete last logic gate in the array (the one on top of all the others)
 	} else if (!keyIsPressed && !keyToggle) {
 		keyToggle = true;
+	}
+
+	//If there are more than one logic gate attempting to be dragged only drag the top one
+	if (draggingArray.length > 1) {
+		for (i=0;i<draggingArray.length-1;i++) {
+			logicGates[draggingArray[i]].dragging = false; //If the logic gate is not on top, don't drag it
+			logicGates[draggingArray[i]].resize = false; //If the logic gate is not on top, don't resize it
+		}
 	}
 }
 
